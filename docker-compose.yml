@@ -7,7 +7,8 @@ services:
     restart: always
     build: bind/
     ports:
-      - "53:53"
+      - "53:53/udp"
+      - "53:53/tcp"
     dns:
       - 8.8.8.8
       - 1.1.1.1
