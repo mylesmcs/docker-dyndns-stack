@@ -1,0 +1,11 @@
+$TTL 7200       ; 2 hours
+$ORIGIN dyn.example.com.
+@               IN SOA  ns1.example.com. postmaster@example.com. (
+                        2002022404 ; serial
+                        10800      ; refresh (3 hours)
+                        3600       ; retry (1 hour)
+                        432000     ; expire (5 days)
+                        1200       ; minimum (20 minutes)
+                        )
+
+        IN NS						ns1.example.com.

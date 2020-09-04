@@ -1,0 +1,69 @@
+version: "3.7"
+services:
+
+  bind:
+    container_name: ddns-bind
+    hostname: ddns-bind
+    restart: always
+    build: bind/
+    ports:
+      - "53:53"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+      - 9.9.9.9
+    networks:
+      ddns-network:
+        aliases:
+        - bind
+
+  api:
+    depends_on:
+      - bind
+    container_name: ddns-api
+    hostname: ddns-api
+    restart: always
+    build: api/
+    environment:
+      - APP_NAME=FlaskApp
+    volumes:
+      - ./api/app:/app/app
+    ports:
+      - "8080:8080"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+      - 9.9.9.9
+    networks:
+      ddns-network:
+        aliases:
+        - api
+
+  nginx:
+    depends_on:
+      - api
+    container_name: ddns-nginx
+    hostname: ddns-nginx
+    restart: always
+    build: nginx/
+    ports:
+      - "80:80"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+      - 9.9.9.9
+    networks:
+      ddns-network:
+        aliases:
+        - nginx
+
+
+networks:
+  ddns-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-ddns
+    ipam:
+      driver: default
+      config:
+        - subnet: ${IPV4_NETWORK:-10.0.0}.0/24
