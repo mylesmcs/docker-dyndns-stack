@@ -4,6 +4,7 @@ import subprocess
 import os
 
 # curl -d '{"ip":"10.0.0.1","hostname":"test"}' -H "Content-Type: application/json" -X POST -i http://localhost:5000/dyn/api/update
+#178.79.150.36
 
 SERVER = '127.0.0.1'
 ZONE = 'dyn.example.com'
