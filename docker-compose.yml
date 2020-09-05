@@ -21,6 +21,7 @@ services:
   api:
     depends_on:
       - bind
+      - maria
     container_name: ddns-api
     hostname: ddns-api
     restart: always
@@ -40,6 +41,24 @@ services:
         aliases:
         - api
 
+  maria:
+    container_name: ddns-maria
+    hostname: ddns-maria
+    restart: always
+    build: mariadb/
+    volumes:
+      - maria-vol-1:/var/lib/mysql/
+    ports:
+      - "${SQL_PORT:-3306}:3306"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+      - 9.9.9.9
+    networks:
+      ddns-network:
+        aliases:
+          - maria
+
   nginx:
     depends_on:
       - api
@@ -58,7 +77,6 @@ services:
         aliases:
         - nginx
 
-
 networks:
   ddns-network:
     driver: bridge
@@ -68,3 +86,6 @@ networks:
       driver: default
       config:
         - subnet: ${IPV4_NETWORK:-10.0.0}.0/24
+
+volumes:
+  maria-vol-1:

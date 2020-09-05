@@ -1,9 +1,10 @@
 from application import app, db
 from flask import jsonify, request
-from app.model import User
+from application.model import User, Records
 import subprocess
 import os
 
+db.create_all()
 # curl -d '{"token":"123456","ip":"10.0.0.1","zone":"test.dyn.example.com"}' -H "Content-Type: application/json" -X POST -i http://localhost:5000/dyn/api/update
 #178.79.150.36
 
@@ -39,7 +40,7 @@ def get_test():
     'send\n'
     # run above action
     run_cmd(action)
-    user_update(token, zone, ip)
+    user_update(zone, ip)
     return ('OK')
 
 def run_cmd(action):
@@ -47,5 +48,8 @@ def run_cmd(action):
     process = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
     return process.stdout
 
-def user_update(token, zone, ip):
-    print(f'{token} -- {zone} -- {ip}')
+def user_update(zone, ip):
+    print(f'{zone} -- {ip}')
+    db.session.add(Records(value=zone, user_id='1'))
+    db.session.commit()
+    
