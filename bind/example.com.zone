@@ -1,6 +1,6 @@
 $TTL 7200       ; 2 hours
-$ORIGIN mytest.com.
-@               IN SOA  ns1.mytest.com. postmaster@mytest.com. (
+$ORIGIN example.com.
+@               IN SOA  ns1.example.com. postmaster@example.com. (
                         2002022404 ; serial
                         10800      ; refresh (3 hours)
                         3600       ; retry (1 hour)
@@ -8,5 +8,5 @@ $ORIGIN mytest.com.
                         1200       ; minimum (20 minutes)
                         )
 
-        IN NS						ns1.mytest.com.
+        IN NS						ns1.example.com.
 ns1     IN A                        10.0.0.60

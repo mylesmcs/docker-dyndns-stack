@@ -42,7 +42,7 @@ def get_test():
     return ('OK')
 
 def run_cmd(action):
-    command = f"nsupdate -k {os.path.dirname(os.path.abspath(__file__))}/ddns-key << EOF\n{action}\nEOF\n"
+    command = f"nsupdate -k {os.path.dirname(os.path.abspath(__file__))}/ddns.key << EOF\n{action}\nEOF\n"
     process = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
     return process.stdout
 

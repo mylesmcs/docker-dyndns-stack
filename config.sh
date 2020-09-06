@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo DDNS Config:
-echo ====================================
-echo
+echo =============
+echo 
 
 BIND="./bind/"
 
@@ -10,6 +10,16 @@ read -p 'Default TTL (sec): ' ttl
 read -p  'DDNS Domain: ' domain
 
 rm $BIND/*.zone
+
+key=$(tsig-keygen -a HMAC-SHA512 $domain)
+
+if [ $? -eq 0 ]; then
+        echo -e "TSIG Key: \e[32mOK\e[0m"
+else
+        echo -e "TSIG Key: \e[31mFAIL\e[0m"
+fi
+
+echo "$key" > ./api/application/ddns.key
 
 # Write zone file
 cat >$BIND/$domain.zone <<EOL
@@ -26,6 +36,12 @@ cat >$BIND/$domain.zone <<EOL
         IN NS						ns1.$domain.
 ns1     IN A                        10.0.0.60
 EOL
+
+if [ $? -eq 0 ]; then
+        echo -e "Zone File: \e[32mOK\e[0m"
+else
+        echo -e "Zone File: \e[31mFAIL\e[0m"
+fi
 
 # Write named.conf
 cat >$BIND/named.conf << EOL
@@ -56,17 +72,19 @@ options {
 zone "$domain" IN {
       type master;
       file "/var/lib/bind/$domain.zone";
-      allow-update { key "ddns-key"; };
+      allow-update { key "$domain"; };
       notify no;
 };
 
-key "ddns-key" {
-        algorithm hmac-sha512;
-        secret "arl7QLXhqiS3pvFUmyZ21g6gHvV6D3Par2VHtP3KtD7ZfoAhY8dAY09c8nOjQVoOwlC8keq+uMSEbAQM9F3hJw==";
-};
+$key
 
 EOL
 
+if [ $? -eq 0 ]; then
+        echo -e "DNS Config: \e[32mOK\e[0m"
+else
+        echo -e "DNS Config: \e[31mFAIL\e[0m"
+fi
 
 #rename -v example.com.zone $domain.zone ./bind/example.com.zone
 #sed -i "s|example.com|$domain|g" "./bind/$domain.zone"
