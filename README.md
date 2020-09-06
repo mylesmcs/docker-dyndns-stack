@@ -4,7 +4,7 @@ Still very much a work in progress
 
 <div>
     <!-- Stability -->
-    <img src="https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square">
+    <img src="https://img.shields.io/badge/stability-unstable-yellow.svg?style=flat-square">
 </div>
 
 ## Description
