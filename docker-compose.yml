@@ -6,6 +6,8 @@ services:
     hostname: ddns-bind
     restart: always
     build: bind/
+    volumes:
+      - bind-vol-1:/var/lib/bind/
     ports:
       - "53:53/udp"
       - "53:53/tcp"
@@ -88,4 +90,5 @@ networks:
         - subnet: ${IPV4_NETWORK:-10.0.0}.0/24
 
 volumes:
+  bind-vol-1:
   maria-vol-1:

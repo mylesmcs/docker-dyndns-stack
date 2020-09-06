@@ -9,10 +9,12 @@ BIND="./bind/"
 read -p 'Default TTL (sec): ' ttl
 read -p  'DDNS Domain: ' domain
 
+rm $BIND/*.zone
+
 # Write zone file
 cat >$BIND/$domain.zone <<EOL
 \$TTL 7200       ; 2 hours
-\$ORIGIN ddns.com.
+\$ORIGIN $domain.
 @               IN SOA  ns1.$domain. postmaster@$domain. (
                         2002022404 ; serial
                         10800      ; refresh (3 hours)
@@ -22,10 +24,11 @@ cat >$BIND/$domain.zone <<EOL
                         )
 
         IN NS						ns1.$domain.
+ns1     IN A                        10.0.0.60
 EOL
 
 # Write named.conf
-cat >$BIND/named1.conf << EOL
+cat >$BIND/named.conf << EOL
 options {
         directory "/var/bind";
 
