@@ -21,5 +21,5 @@ Installation
 Features
 
 ## Tasks/Todo
-- [] WebUI - create accout, login, display records, update records
-- [] API - response/error messages for requests sent to server
+- [ ] WebUI - create accout, login, display records, update records
+- [ ] API - response/error messages for requests sent to server
