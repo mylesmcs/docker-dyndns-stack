@@ -18,8 +18,10 @@ The docker deployment consists of the following containers:
 Installation
 
 ## Usage
-Features
+1. Execute config-gen.sh and follow the prompts to generate the neccesary configuration files
+1. docker-compose up
 
 ## Tasks/Todo
 - [ ] WebUI - create accout, login, display records, update records
 - [ ] API - response/error messages for requests sent to server
+
