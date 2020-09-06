@@ -1,5 +1,7 @@
 # dynamic-dns-dockerised
 
+Still very much a work in progress
+
 <div>
     <!-- Stability -->
     <img src="https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square">
@@ -15,7 +17,7 @@ The docker deployment consists of the following containers:
 * NGINX - uWSGI proxy for API service
 
 ## Installation
-1. Execute config-gen.sh and follow the prompts to generate the neccesary configuration files
+1. Execute config-gen.sh and follow the prompts to generate the necessary configuration files
 1. docker-compose up
 
 ## Usage
