@@ -21,7 +21,8 @@ The docker deployment consists of the following containers:
 1. docker-compose up
 
 ## Usage
-Usage
+### update endpoint
+curl -d '{"token":"xxx","ip":"x.x.x.x","zone":"xyx.domain.com"}' -H "Content-Type: application/json" -X POST -i http://xxxxxx:5000/dyn/api/update
 
 ## Tasks/Todo
 - [ ] WebUI - create accout, login, display records, update records

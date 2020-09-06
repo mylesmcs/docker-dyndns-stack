@@ -6,7 +6,7 @@ import os
 
 db.create_all()
 # curl -d '{"token":"123456","ip":"10.0.0.1","zone":"test.dyn.example.com"}' -H "Content-Type: application/json" -X POST -i http://localhost:5000/dyn/api/update
-# 178.79.150.36
+
 
 SERVER = 'bind'
 
