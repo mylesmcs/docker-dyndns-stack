@@ -17,7 +17,7 @@ The docker deployment consists of the following containers:
 * NGINX - uWSGI proxy for API service
 
 ## Installation
-1. Execute config-gen.sh and follow the prompts to generate the necessary configuration files
+1. Execute config.sh and follow the prompts to generate the necessary configuration files
 1. docker-compose up
 
 ## Usage
