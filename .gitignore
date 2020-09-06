@@ -1,5 +1,6 @@
 # project specific
 ddns.key
+named.conf
 *.zone
 
 # Byte-compiled / optimized / DLL files
