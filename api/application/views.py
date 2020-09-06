@@ -6,7 +6,7 @@ import os
 
 db.create_all()
 # curl -d '{"token":"123456","ip":"10.0.0.1","zone":"test.dyn.example.com"}' -H "Content-Type: application/json" -X POST -i http://localhost:5000/dyn/api/update
-#178.79.150.36
+# 178.79.150.36
 
 SERVER = 'bind'
 
@@ -16,10 +16,8 @@ SERVER = 'bind'
 def index():
 
     # Use os.getenv("key") to get environment variables
-    app_name = os.getenv("APP_NAME")
+    #app_name = os.getenv("APP_NAME")
 
-    if app_name:
-        return f"Hello from {app_name} running in a Docker container behind Nginx!"
 
     return "Hello from Flask"
 
