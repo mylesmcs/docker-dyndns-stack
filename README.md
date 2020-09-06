@@ -6,7 +6,7 @@
 </div>
 
 ## Description
-The project aims to provide an easily deployable dynamic DNS (DDNS) service via docker-compose. 
+The project aims to provide an easily deployable dynamic DNS (DDNS) service via docker. 
 
 The docker deployment consists of the following containers:
 * BIND - DNS server
