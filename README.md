@@ -27,4 +27,5 @@ curl -d '{"token":"xxx","ip":"x.x.x.x","zone":"xyx.domain.com"}' -H "Content-Typ
 ## Tasks/Todo
 - [ ] WebUI - create accout, login, display records, update records
 - [ ] API - response/error messages for requests sent to server
+- [ ] API - Implement user tokens for API. (currently needed for endpoint but not checked)
 
