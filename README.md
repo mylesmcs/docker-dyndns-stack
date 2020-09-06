@@ -6,13 +6,13 @@
 </div>
 
 ## Description
-The project aims to provide an easily deployable dynamic DNS (DDNS) service via docker. 
+The project aims to provide an easily deployable dynamic DNS (DDNS) service via docker-compose. 
 
 The docker deployment consists of the following containers:
 * BIND - DNS server
 * API - API build on Python3/Flask
 * MARIA - Storage of user credentials and accout info
-* MGINX - uWSGI proxy for API service
+* NGINX - uWSGI proxy for API service
 
 ## Installation
 Installation
@@ -21,4 +21,5 @@ Installation
 Features
 
 ## Tasks/Todo
-- [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
+- [] WebUI - create accout, login, display records, update records
+- [] API - response/error messages for requests sent to server
