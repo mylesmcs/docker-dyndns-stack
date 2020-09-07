@@ -1,8 +1,4 @@
-#!/bin/bash
-
-echo DDNS Config:
-echo =============
-echo 
+#!/bin/env bash
 
 BIND="./bind/"
 
