@@ -21,8 +21,11 @@ cat << EOF > ddns.conf
 # -------------------------------
 
 TZ=
-NSDOMAIN=
-DDNSDOMAIN=
+
+DNS_DOMAIN=
+DDNS_DOMAIN=
+
+CONTAINER_NETWORK=
 
 # -------------------------------
 # Port bindings
@@ -34,9 +37,9 @@ DNS=53
 # -------------------------------
 # Maria database config
 # -------------------------------
-DBNAME=
-DBUSER=
-DBPASS=
-DBROOTPASS=
+DB_NAME=
+DB_USER=
+DB_PASS=
+DB_ROOT_PASS=
 
 EOF
