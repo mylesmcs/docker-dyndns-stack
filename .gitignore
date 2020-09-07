@@ -1,4 +1,5 @@
 # project specific
+ddns.conf
 ddns.key
 named.conf
 *.zone
