@@ -6,6 +6,8 @@ services:
     hostname: ddns-bind
     restart: always
     build: bind/
+    environment:
+      - DDNS_DOMAIN=${DDNS_DOMAIN}
     volumes:
       - bind-vol-1:/var/lib/bind/
     ports:

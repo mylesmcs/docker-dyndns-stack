@@ -23,6 +23,8 @@ dnsdomain=${dnsdomain:-example.com}
 read -p "Enter dynamic dns domain [example.com]: " ddnsdomain
 ddnsdomain=${ddnsdomain:-example.com}
 
+dbname=${dbname:-vmail}
+
 read -p "Enter database username [ddns]: " dbuname
 dbuname=${dbuname:-ddns}
 
@@ -57,7 +59,7 @@ DNS=53
 # -------------------------------
 # Maria database config
 # -------------------------------
-DB_NAME=
+DB_NAME=$dbname
 DB_USER=$dbuname
 DB_PASS=$dbupass
 DB_ROOT_PASS=$dbrpass
