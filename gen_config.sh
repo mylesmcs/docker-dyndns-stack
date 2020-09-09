@@ -14,18 +14,38 @@ read -r -p "Config already exists, overwrite? [y/N]" response
   esac
 fi
 
+read -p "Enter timezone [$(timedatectl | grep 'Time zone' |  grep -Po '(?<=\: ).*[^\s]')]: " timezone
+timezone=${timezone:-$(timedatectl | grep 'Time zone' |  grep -Po '(?<=\: ).*[^\s]')}
+
+read -p "Enter server domain [example.com]: " dnsdomain
+dnsdomain=${dnsdomain:-example.com}
+
+read -p "Enter dynamic dns domain [example.com]: " ddnsdomain
+ddnsdomain=${ddnsdomain:-example.com}
+
+read -p "Enter database username [ddns]: " dbuname
+dbuname=${dbuname:-ddns}
+
+read -p "Enter database user password: " dbupass
+dbupass=${dbupass:-"$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12})"}
+
+read -p "Enter database root password: " dbrpass
+dbrpass=${dbrpass:-"$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32})"}
+
+read -p "Container network IPv4 [10.10.0.x]: " containernet
+containernet=${containernet:-10.10.0}
 
 cat << EOF > ddns.conf
 # -------------------------------
 # Dynamic DNS Dockerisec config
 # -------------------------------
 
-TZ=
+TZ=$timezone
 
-DNS_DOMAIN=
-DDNS_DOMAIN=
+DNS_DOMAIN=$dnsdomain
+DDNS_DOMAIN=$ddnsdomain
 
-CONTAINER_NETWORK=
+CONTAINER_NETWORK=$containernet
 
 # -------------------------------
 # Port bindings
@@ -38,8 +58,8 @@ DNS=53
 # Maria database config
 # -------------------------------
 DB_NAME=
-DB_USER=
-DB_PASS=
-DB_ROOT_PASS=
+DB_USER=$dbuname
+DB_PASS=$dbupass
+DB_ROOT_PASS=$dbrpass
 
 EOF

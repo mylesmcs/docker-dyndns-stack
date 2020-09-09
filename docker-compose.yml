@@ -9,8 +9,8 @@ services:
     volumes:
       - bind-vol-1:/var/lib/bind/
     ports:
-      - "53:53/udp"
-      - "53:53/tcp"
+      - "${DNS}:${DNS}/udp"
+      - "${DNS}:${DNS}/tcp"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -48,10 +48,14 @@ services:
     hostname: ddns-maria
     restart: always
     build: mariadb/
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
     volumes:
       - maria-vol-1:/var/lib/mysql/
     ports:
-      - "${SQL_PORT:-3306}:3306"
+      - "${SQL}:${SQL}"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -87,7 +91,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: ${IPV4_NETWORK:-10.0.0}.0/24
+        - subnet: ${CONTAINER_NETWORK:-10.10.0}.0/24
 
 volumes:
   bind-vol-1:
