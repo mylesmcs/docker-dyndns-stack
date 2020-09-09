@@ -1,87 +1,67 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
-BIND="./bind/"
+set -o pipefail
 
-read -p 'Default TTL (sec): ' ttl
-read -p  'DDNS Domain: ' domain
-
-rm $BIND/*.zone
-
-key=$(tsig-keygen -a HMAC-SHA512 $domain)
-
-if [ $? -eq 0 ]; then
-        echo -e "TSIG Key: \e[32mOK\e[0m"
-else
-        echo -e "TSIG Key: \e[31mFAIL\e[0m"
+if [ -f ddns.conf ]; then
+read -r -p "Config already exists, overwrite? [y/N]" response
+  case $response in
+    [yY][eE][sS]|[yY])
+      rm ddns.conf
+      ;;
+    *)
+      exit 1
+      ;;
+  esac
 fi
 
-echo "$key" > ./api/application/ddns.key
+read -p "Enter timezone [$(timedatectl | grep 'Time zone' |  grep -Po '(?<=\: ).*[^\s]')]: " timezone
+timezone=${timezone:-$(timedatectl | grep 'Time zone' |  grep -Po '(?<=\: ).*[^\s]')}
 
-# Write zone file
-cat >$BIND/$domain.zone <<EOL
-\$TTL 7200       ; 2 hours
-\$ORIGIN $domain.
-@               IN SOA  ns1.$domain. postmaster@$domain. (
-                        2002022404 ; serial
-                        10800      ; refresh (3 hours)
-                        3600       ; retry (1 hour)
-                        432000     ; expire (5 days)
-                        1200       ; minimum (20 minutes)
-                        )
+read -p "Enter server domain [example.com]: " dnsdomain
+dnsdomain=${dnsdomain:-example.com}
 
-        IN NS						ns1.$domain.
-ns1     IN A                        10.0.0.60
-EOL
+read -p "Enter dynamic dns domain [example.com]: " ddnsdomain
+ddnsdomain=${ddnsdomain:-example.com}
 
-if [ $? -eq 0 ]; then
-        echo -e "Zone File: \e[32mOK\e[0m"
-else
-        echo -e "Zone File: \e[31mFAIL\e[0m"
-fi
+dbname=${dbname:-vmail}
 
-# Write named.conf
-cat >$BIND/named.conf << EOL
-options {
-        directory "/var/bind";
+read -p "Enter database username [ddns]: " dbuname
+dbuname=${dbuname:-ddns}
 
-        pid-file "/var/run/named/named.pid";
+read -p "Enter database user password: " dbupass
+dbupass=${dbupass:-"$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-12})"}
 
-        // Configure the IPs to listen on
-        listen-on { any; };
-        listen-on-v6 { none; };
+read -p "Enter database root password: " dbrpass
+dbrpass=${dbrpass:-"$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32})"}
 
-        // Allow only specific hosts to use the DNS server
-        //allow-query {
-        //      127.0.0.1;
-        //};
+read -p "Container network IPv4 [10.10.0.x]: " containernet
+containernet=${containernet:-10.10.0}
 
-        // Specify a list of IPs/masks to allow zone transfers to
-        allow-transfer {
-                none;
-        };
+cat << EOF > ddns.conf
+# -------------------------------
+# Dynamic DNS Dockerisec config
+# -------------------------------
 
-        // Disable recursion
-        allow-recursion { none; };
-        recursion no;
-};
+TZ=$timezone
 
-zone "$domain" IN {
-      type master;
-      file "/var/lib/bind/$domain.zone";
-      allow-update { key "$domain"; };
-      notify no;
-};
+DNS_DOMAIN=$dnsdomain
+DDNS_DOMAIN=$ddnsdomain
 
-$key
+CONTAINER_NETWORK=$containernet
 
-EOL
+# -------------------------------
+# Port bindings
+# -------------------------------
+HTTP=80
+HTTPS=443
+DNS=53
 
-if [ $? -eq 0 ]; then
-        echo -e "DNS Config: \e[32mOK\e[0m"
-else
-        echo -e "DNS Config: \e[31mFAIL\e[0m"
-fi
+# -------------------------------
+# Maria database config
+# -------------------------------
+DB_NAME=$dbname
+DB_USER=$dbuname
+DB_PASS=$dbupass
+DB_ROOT_PASS=$dbrpass
 
-#rename -v example.com.zone $domain.zone ./bind/example.com.zone
-#sed -i "s|example.com|$domain|g" "./bind/$domain.zone"
-#sed -i "s|TTL 60|TTL $ttl|g" "./bind/$domain.zone"
+EOF
